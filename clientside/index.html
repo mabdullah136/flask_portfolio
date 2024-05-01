@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+
+    <!-- box icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!-- custom css -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <!-- header design -->
+
+    <header class="header">
+        <a href="#" class="logo">Portfolio</a>
+        
+        <i class="bx bx-menu" id="menu-icon"></i>
+
+        <nav class="navbar">
+            <a href="#home" class="active">Home</a>
+            <a href="#about">About</a>
+            <a href="#services">Services</a>
+            <a href="#portfolio">Portfolio</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <!-- home section design -->
+    <section class="home" id="home">
+        <div class="home-content">
+            <h3>Hello, It's Me</h3>
+            <h1 id="username" class="username"></h1>
+            <h3>And I'm a <span class='multiple-text'></span> </span></h3>
+            <p id="description"></p>
+            <div class="social-media">
+                <a href="" id="facebook"><i class='bx bxl-facebook'></i></a>
+                <a href="" id="twitter"><i class='bx bxl-twitter'></i></a>
+                <a href="" id="instagram"><i class='bx bxl-instagram'></i></a>
+                <a href="" id="linkedin"><i class='bx bxl-linkedin'></i></a>
+            </div>
+            <a href="" id="cv" class="btn">Download CV</a>
+        </div>
+        <div class="home-img" >
+            <img src="" id="profile-img" alt="Image not found!!!" style="background-color: transparent;">
+        </div>
+    </section>
+
+    <!-- about section design -->
+
+    <section class="about" id="about">
+        <div class="about-img">
+            <img src="" id="about-profile-img" alt="Image not found!!!">
+        </div>
+        <div class="about-content">
+            <h2 class="heading">About <span>Me</span></h2>
+            <h3 id="profession"></h3>
+            <p id="detailed_description"></p>
+            <a href="" id="github" target="_blank" class="btn">Read More</a>
+        </div>
+    </section>
+
+    <!-- services section design -->
+    <section class="services" id="services">
+        <h2 class="heading">Our <span>Services</span></h2>
+    
+        <div class="services-container">
+            <!-- Services will be dynamically generated here -->
+        </div>
+    </section>
+    <!-- Portfolio section design -->
+
+    <section class="portfolio" id="portfolio">
+        <h2 class="heading">Latest <span>Projects</span></h2>
+
+        <div class="portfolio-container">
+            <!-- Portfolio items will be dynamically generated here -->
+        </div>
+    </section>
+
+    <!-- contact section design -->
+
+    <section class="contact" id="contact">
+        <h2 class="heading">Contact <span>Me!</span></h2>
+        <form action="" id="contact-form">
+            <div class="input-box">
+                <input type="text" placeholder="Full Name" id="sender-name">
+                <input type="email" placeholder="Email Address" id="sender-email">
+            </div>
+            <div class="input-box">
+                <input type="number" placeholder="Mobile Number" id="sender-mobile">
+                <input type="text" placeholder="Email Subject" id="sender-subject">
+            </div>
+            <textarea name="" id="message" cols="30" rows="10" placeholder="Your Message"></textarea>
+            <input type="submit" value="Send Message" class="btn">
+        </form>
+    </section>
+
+    <!-- footer design -->
+
+    <footer class="footer">
+        <div class="footer-text">
+            <p>Copyright &copy; 2024 by <span id="footer-user"></span> | All Rights Reserved.</p>
+        </div>
+
+        <div class="footer-iconTop">
+            <a href="#home"><i class="bx bx-up-arrow-alt"></i></a>
+        </div>
+    </footer>
+
+    <!-- scroll reveal -->
+    <script src="https://unpkg.com/scrollreveal"></script>
+
+    <!-- typed js -->
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+
+    <!-- custom js -->
+
+    <script src="js/script.js"></script>
+
+</body>
+
+<script>
+
+  const defaultIconClass = 'bx-code-alt'; // Icon class remains same for all services
+
+    fetch(`${baseUrl}/user_detail`)
+    .then(response => {
+      //  console.log(response);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        const user = data[0];
+
+        document.getElementById('username').textContent = user.name;
+        document.getElementById('footer-user').textContent = user.name;
+        document.getElementById('description').textContent = user.description;
+        document.querySelector('.multiple-text').textContent = user.profession;
+        document.getElementById('facebook').href = user.facebook;
+        document.getElementById('twitter').href = user.twitter;
+        document.getElementById('instagram').href = user.instagram;
+        document.getElementById('linkedin').href = user.linkedin;
+        document.getElementById('cv').href = `${baseUrl}/static/images/${user.cv}`;
+        document.getElementById('profile-img').src = `${baseUrl}/static/images/${user.profile}`;
+        document.getElementById('about-profile-img').src = `${baseUrl}/static/images/${user.profile}`;
+        document.getElementById('profession').textContent = user.profession;
+        document.getElementById('detailed_description').textContent = user.detailed_description;
+        document.getElementById('github').href = user.github;
+        const profession = user.profession;
+    })
+    .catch(error => {
+        // Handle fetch error
+        console.error('Error:', error);
+    });
+
+    fetch(`${baseUrl}/projects`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const portfolioContainer = document.querySelector('.portfolio-container');
+                data.forEach(item => {
+                   // console.log('Project:', item);
+                    const portfolioBox = document.createElement('div');
+                    portfolioBox.classList.add('portfolio-box');
+
+                    const img = document.createElement('img');
+                    img.src = `${baseUrl}/static/images/${item.images}`; // Assuming the image URL is stored in the 'image' property
+                    img.alt = 'Image not found!!!';
+                    portfolioBox.appendChild(img);
+
+                    const portfolioLayer = document.createElement('div');
+                    portfolioLayer.classList.add('portfolio-layer');
+
+                    const projectName = document.createElement('h4');
+                    projectName.textContent = item.name; // Assuming the project name is stored in the 'name' property
+                    portfolioLayer.appendChild(projectName);
+
+                    const projectDescription = document.createElement('p');
+                    projectDescription.textContent = item.short_description; // Assuming the project description is stored in the 'description' property
+                    portfolioLayer.appendChild(projectDescription);
+
+                    const link = document.createElement('a');
+                    link.href = item.project_link; // Assuming the external link is stored in the 'externalLink' property
+                    link.innerHTML = '<i class="bx bx-link-external"></i>';
+                    portfolioLayer.appendChild(link);
+
+                    portfolioBox.appendChild(portfolioLayer);
+                    portfolioContainer.appendChild(portfolioBox);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while fetching portfolio data.");
+            });
+
+
+            fetch(`${baseUrl}/services`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const servicesContainer = document.querySelector('.services-container');
+            data.forEach(service => {
+                console.log('Service:', service);
+                const servicesBox = document.createElement('div');
+                servicesBox.classList.add('services-box');
+
+                const icon = document.createElement('i');
+                icon.classList.add('bx', defaultIconClass); // Add 'bx' class along with the default icon class
+                servicesBox.appendChild(icon);
+
+                const serviceName = document.createElement('h3');
+                serviceName.textContent = service.title; // Assuming the service name is provided in the backend response
+                servicesBox.appendChild(serviceName);
+
+                const serviceDescription = document.createElement('p');
+                serviceDescription.textContent = service.description; // Assuming the service description is provided in the backend response
+                servicesBox.appendChild(serviceDescription);
+
+                const readMoreLink = document.createElement('a');
+                readMoreLink.href = service.link; // Assuming the service link is provided in the backend response
+                readMoreLink.textContent = 'Read More';
+                readMoreLink.classList.add('btn');
+                servicesBox.appendChild(readMoreLink);
+
+                servicesContainer.appendChild(servicesBox);
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("An error occurred while fetching services data.");
+        });
+
+
+        const form = document.getElementById('contact-form');
+
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('sender-name').value;
+            const email = document.getElementById('sender-email').value;
+            const mobile = document.getElementById('sender-mobile').value;
+            const subject = document.getElementById('sender-subject').value;
+            const message = document.getElementById('message').value;
+        
+            const body = {
+                name: name,
+                email: email,
+                mobile: mobile,
+                subject: subject,
+                message: message
+            };
+        
+            fetch(`${baseUrl}/send_email`, {
+                method: 'Post',
+                body: JSON.stringify(body),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+                alert("Message Sent successfully!");
+            })
+            .catch(error => {
+                console.error(error);
+                alert("An error occurred while sending message.");
+            });
+        });
+        
+
+
+
+
+
+
+
+
+</script>
+
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Services</title>
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+    <header>
+        <h1>Admin Panel</h1>
+        <nav>
+            <ul>
+                <li><a href="users.html">User</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="logout.html">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <form id="addServiceForm">
+            <label for="serviceNameInput">Name:</label>
+            <input type="text" id="serviceNameInput" placeholder="Service Name">
+            <label for="serviceDescriptionInput">Description:</label>
+            <!-- <input type="text" id="serviceDescriptionInput" placeholder="Service Description"> -->
+            <textarea name="serviceDescriptionInput" id="serviceDescriptionInput" placeholder="Service Description" cols="30" rows="10"></textarea>
+            <label for="serviceLinkInput">Link:</label>
+            <input type="text" id="serviceLinkInput" placeholder="Service Link">
+            <button type="submit">Add Service</button>
+        </form>
+
+        <!-- Container for service list -->
+        <div id="service-list"></div>
+
+        <!-- Modal for updating service -->
+        <div id="updateServiceModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Update Service</h2>
+                <form id="updateServiceForm">
+                    <label for="updatedServiceNameInput">Name:</label>
+                    <input type="text" id="updatedServiceNameInput" placeholder="Service Name">
+                    <label for="updatedServiceDescriptionInput">Description:</label>
+                    <input type="text" id="updatedServiceDescriptionInput" placeholder="Service Description">
+                    <label for="updatedServiceLinkInput">Link:</label>
+                    <input type="text" id="updatedServiceLinkInput" placeholder="Service Link">
+                    <button type="submit">Update</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script src="services.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!-- users.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Users</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>User Information</h1>
+      <nav>
+        <ul>
+          <li><a href="users.html">User</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="logout.html">Logout</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <form action="" id="user-update">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" />
+        <label for="profession">Profession:</label>
+        <input type="text" name="profession" id="profession" />
+        <label for="facebook">Facebook:</label>
+        <input type="text" name="facebook" id="facebook" />
+        <label for="twitter">Twitter:</label>
+        <input type="text" name="twitter" id="twitter" />
+        <label for="instagram">Instagram:</label>
+        <input type="text" name="instagram" id="instagram" />
+        <label for="linkedin">LinkedIn:</label>
+        <input type="text" name="linkedin" id="linkedin" />
+        <label for="github">Github:</label>
+        <input type="text" name="github" id="github" />
+
+        <label for="short-description">Description:</label>
+        <textarea
+          name="short-description"
+          id="short-description"
+          cols="30"
+          rows="10"
+        ></textarea>
+        <label for="detailed_description">Detailed Description:</label>
+        <textarea
+          name="detailed_description"
+          id="detailed_description"
+          cols="30"
+          rows="10"
+        ></textarea>
+
+        <button type="submit">Update User</button>
+      </form>
+      <br />
+      <form action="" id="documents">
+        <label for="cv">CV:</label>
+        <input type="file" name="cv" id="cv" />
+        <label for="profile-pic">Profile Image</label>
+        <input type="file" name="profile-pic" id="profile-pic" />
+        <button type="submit">Upload Files</button>
+      </form>
+    </main>
+    <script src="users.js"></script>
+    
+  </body>
+</html>
