@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+    <title>Profile</title>
+</head>
+<body>
+    <div class="nav">
+        <h1>Profile</h1>
+        <div class="navitem">
+            <ul>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/logout">Signout</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- <h1 style="text-align: center;">Welcome, {{ current_user.username }}</h1> -->
+    <div class="profile_container">
+        <div class="profile">
+            <div class="profile_image">
+                {% if current_user.picture %}
+                <img src="{{ url_for('static', filename=current_user.picture) }}"  alt="Profile Image">
+                {% else %}
+                <img src="{{ url_for('static', filename='images/default_profile.png') }}" alt="Default Profile Image">
+                {% endif %}
+            </div>
+            <div class="profile_text">
+                <h1>Upload your Image</h1>
+                <form action="/upload_profile" method="POST" enctype="multipart/form-data"> <!-- Added enctype attribute -->
+                    <input type="file" name="picture" id="picture" accept="image/*">
+                    <button type="submit">Upload</button>
+                </form>
+            </div>
+            
+        </div>
+        <div class="profile_data">
+            <h1>Username: {{ current_user.username }}</h1>
+            <h1>Email: {{ current_user.email }}</h1>
+            <p class="change-password-link">If you want to change password? <a href="/change_password">click here</a></p>
+            <form action="/change_username" method="POST">
+                <label for="new_username">Username</label>
+                <input type="text" name="new_username" id="new_username" value="{{ current_user.username }}">
+                <button type="submit" style="width:10%; margin-left: 0%;">Edit</button>
+            </form>
+            <br>
+            <form action="/change_email" method="POST">
+                <label for="new_email">Email</label>
+                <input type="text" name="new_email" id="new_email" value="{{ current_user.email }}">
+                <button type="submit" style="width:10%; margin-left: 0%;">Edit</button>
+            </form>
+        </div>
+    </div>
+    {% if not current_user.is_authenticated %}
+    <script>
+        window.location.href = '/login';
+    </script>
+    {% endif %}
+</body>
+</html>

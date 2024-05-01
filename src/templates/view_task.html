@@ -1,0 +1,46 @@
+<!-- templates/view_task.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+    <title>View Task</title>
+    <style>
+        table {
+            width: 100%;
+        }
+        table th, table td {
+            text-align: left;
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <h1>todolist</h1>
+        <div class="navitem">
+            <ul>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/logout">Signout</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="task-details">
+        <h1>Task Details</h1>
+        <table border="1">
+            <tr>
+                <th style="width: 10%;">Name</th>
+                <td>{{ todo.todoname }}</td>
+            </tr>
+            <tr>
+                <th style="width: 10%;">Description</th>
+                <td>{{ todo.tododis }}</td>
+            </tr>
+            <!-- Add more task details as needed -->
+        </table>
+    </div>
+</body>
+</html>
