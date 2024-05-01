@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Projects</title>
+    <link rel="stylesheet" href="styles.css">
+    
+</head>
+<body>
+    <header>
+        <h1>Projects</h1>
+        <nav>
+            <ul>
+                <li><a href="users.html">User</a></li>
+                <li><a href="projects.html">Projects</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="logout.html">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <!-- Button to open add project modal -->
+        <button id="addProjectButton">Add Project</button>
+
+        <!-- Container for project list -->
+        <div class="portfolio-container" id="project-list">
+            <!-- Project items will be dynamically generated here -->
+        </div>
+
+        <!-- Modal for adding/updating project -->
+        <div id="projectModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 id="modalTitle">Add Project</h2>
+                <form id="projectForm">
+                    <label for="projectNameInput">Name:</label>
+                    <input type="text" id="projectNameInput" placeholder="Project Name">
+                    <label for="projectDescriptionInput">Description:</label>
+                    <input type="text" id="projectDescriptionInput" placeholder="Project Description">
+                    <label for="projectLinkInput">Link:</label>
+                    <input type="text" id="projectLinkInput" placeholder="Project Link">
+                    <label for="projectImageInput">Image:</label>
+                    <input type="file" id="projectImageInput">
+                    <button type="submit" id="submitButton">Add Project</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script src="projects.js"></script>
+</body>
+</html>
