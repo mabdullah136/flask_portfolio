@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+    <title>Create_todo</title>
+</head>
+<body>
+        <div class="nav">
+            <h1>Create-todo</h1>
+            <div class="navitem">
+                <ul>
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href="/profile">Profile</a></li>
+                    <li><a href="/logout">Signout</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="Create-todo" style="margin-top: 20px;">
+            <form action="/edit_task/{{task.todoid}}" method="POST">
+                <label for="new_todoname">Enter Task Name</label>
+                <input type="text" name="new_todoname" id="new_todoname" value="{{task.todoname}}">
+                <h2>Add Task Description</h2>
+                <textarea id="new_tododis" name="new_tododis" rows="4" cols="50">{{ task.tododis }}</textarea>
+                <button type="submit">Edit</button>
+            </form>
+        </div>
+        
+</body>
+</html>

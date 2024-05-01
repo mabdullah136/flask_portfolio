@@ -1,0 +1,109 @@
+<!-- templates/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
+    <title>Dashboard</title>
+    <style>
+        table {
+            width: 100%;
+        }
+        .table-container {
+            max-height: 200px; /* Set the desired fixed height */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+        .button-container {
+            text-align: center;
+        }
+        .button-container button {
+            width: 23%;
+            font-size: 14px;
+            margin: 2px; 
+            display: inline;
+        }
+    </style>
+</head>
+<body>
+    <div class="Dashboard-container">
+        <div class="nav">
+            <h1>todolist</h1>
+            <div class="navitem">
+                <ul>
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href="/profile">Profile</a></li>
+                    <li><a href="/logout">Signout</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="Active-tasklist-block">
+           <h1 style="padding-left: 10px;">Active Task List</h1> 
+           <div class="table-container"> <!-- Wrap the table with a div for scrolling -->
+               <table border="1">
+                <thead>
+                  <tr>
+                    <th style="text-align: center; width:70%;">Name</th>
+                    <th style="text-align: center;">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for todo in todos %}
+                  {% if not todo.todo_status %}
+                  <tr>
+                    <td style="text-align: center; width:70%;">{{ todo.todoname }}</td>
+                    <td class="button-container">
+                        <!-- <button>Edit</button> -->
+                        <form method="GET" action="/edit_task/{{ todo.todoid }}">
+                            <button type="submit">Edit</button>
+                        </form>
+                        <form method="GET" action="/view_task/{{ todo.todoid }}">
+                            <button type="submit">View</button>
+                        </form>
+                        <form method="POST" action="/complete_todo/{{ todo.todoid }}">
+                            <button type="submit">Complete</button>
+                        </form>
+                    </td>
+                  </tr>
+                  {% endif %}
+                  {% endfor %}
+                </tbody>
+              </table>
+           </div>
+        </div>
+        <div class="Active-tasklist-block">
+            <h1 style="padding-left: 10px;">Completed Task List</h1>
+            <div class="table-container"> <!-- Wrap the table with a div for scrolling -->
+                <table border="1">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width:70%;">Name</th>
+                            <th style="text-align: center;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for todo in todos %}
+                        {% if todo.todo_status %}
+                        <tr>
+                            <td style="text-align: center; width:70%;">{{ todo.todoname }}</td>
+                            <td class="button-container">
+                                <form method="GET" action="/view_task/{{ todo.todoid }}">
+                                    <button type="submit">View</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="block">
+            <div class="create-task-block">
+                <a href="/create_todo" style="text-decoration: none;"><h1>+</h1></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
