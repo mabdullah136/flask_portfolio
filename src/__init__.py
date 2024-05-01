@@ -4,20 +4,24 @@ from flask_login import LoginManager
 # from flask_session import Session
 from flask import Flask
 from flask_cors import CORS
+from flask_mail import Mail
 
 db = SQLAlchemy()
 def create_app():
 
     app=Flask(__name__,static_url_path='/static')
-    cors = CORS(app, resources={r"*": {"origins": "http://127.0.0.1:5500"}})
+    cors = CORS(app, resources={r"*": {"origins": "*"}})
 
-
+    app.config['MAIL_SERVER'] = 'smtp.gmail.com' 
+    app.config['MAIL_PORT'] = 587 
+    app.config['MAIL_USE_TLS'] = True
+    app.config['MAIL_USERNAME'] = 'anasircft@gmail.com'  
+    app.config['MAIL_PASSWORD'] = 'vlnw cbss thko jjoj' 
+    mail = Mail(app)
     app.config['SECRET_KEY']='secret-key'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:@localhost/portfolio'
     app.config['SESSION_TYPE'] = 'filesystem'
     app.config['SESSION_PERMANENT'] = False
-    # Session(app)
-
     app.config['UPLOAD_FOLDER'] = 'src/static/images'
     app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
 

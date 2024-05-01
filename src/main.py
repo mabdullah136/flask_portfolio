@@ -8,63 +8,30 @@ from werkzeug.utils import secure_filename
 from flask import current_app
 from flask import request, jsonify, make_response
 from flask import Flask, send_from_directory
+from flask_mail import Mail,Message
+from flask import current_app
+
+main = Blueprint('main', __name__)
+
+@main.route('/send_email', methods=['POST'])
+def send_email_endpoint():
+    if request.method == 'POST':
+        data = request.json
+        name = data.get('name')
+        email = data.get('email')
+        subject = data.get('subject')
+        message = data.get('message')
+        message_body = f"Sender Name: {name}\nSender Email: {email}\nSubject: {subject}\nMessage: {message}"
+        send_email(name, email, subject, message_body)
+        return jsonify({'message': 'Email sent successfully'}), 200
+
+def send_email(name, email, subject, message):
+    mail = current_app.extensions['mail'] 
+    msg = Message(subject, sender=email, recipients=['anasircft@gmail.com'], body=message)
+    mail.send(msg)
 
 
-
-main=Blueprint('main',__name__)
-
-
-@main.route('/')
-def index():
-    return render_template('login.html')
-
-@main.route('/profile')
-@login_required
-def profile():
-    is_logged_out = False  
-    if not current_user.is_authenticated:
-        is_logged_out = True
-    return render_template('profile.html',username=current_user.username,is_logged_out=is_logged_out)
-
-@main.route('/change_password')
-def change_password():
-    return render_template('change_password.html')
-    
-@main.route('/change_password',methods=['GET','POST'])
-def change_password_post():
-    if request.method=='POST':
-        current_password=request.form.get('current_password')
-        new_password=request.form.get('new_password')
-        if not check_password_hash(current_user.password,current_password):
-            flash('current password is incorrect','error')
-
-        else:
-            current_user.set_password(new_password)
-            session=db.session
-            session.commit()
-            return redirect('/profile')
-        
-    return render_template('change_password.html')
-
-@main.route('/change_username',methods=['POST'])
-def change_username():
-    if request.method=='POST':
-        new_username=request.form.get('new_username')
-        current_user.set_username(new_username)
-        session=db.session
-        session.commit()
-        return redirect('/profile')
-
-@main.route('/change_email',methods=['POST'])
-def change_email():
-    if request.method=='POST':
-        new_email=request.form.get('new_email')
-        current_user.set_email(new_email)
-        session=db.session
-        session.commit()
-        return redirect('/profile')
-
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf', 'doc', 'docx'}
 
 def generate_random_filename(filename):
     _, extension = os.path.splitext(filename)
@@ -75,26 +42,6 @@ def generate_random_filename(filename):
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-
-@main.route('/upload_profile', methods=['POST'])
-def profile_update():
-    app = current_app
-    if 'picture' not in request.files:
-        flash('No file part', 'error')
-        return redirect(request.url)
-    file = request.files['picture']
-    if file.filename == '':
-        flash('No selected file', 'error')
-        return redirect(request.url)
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        fn = generate_random_filename(filename)
-        relative_path = f'images/{fn}' 
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], fn))
-        user = User.query.get(current_user.id)
-        user.picture = relative_path
-        db.session.commit()
-    return redirect(url_for('main.profile'))
 
 @main.route('/user_detail', methods=['POST'])
 def create_user_detail():
@@ -229,20 +176,84 @@ def update_user_detail(id):
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
         data = request.json
+        print("Data received from frontend:", data)  # Print the received data
+
     elif content_type.startswith('multipart/form-data') or content_type.startswith('application/x-www-form-urlencoded'):
         data = request.form.to_dict(flat=True)
     else:
         return make_response(jsonify({'message': 'Unsupported Content-Type'}), 415)
+
     for key, value in data.items():
         setattr(user_detail, key, value)
+    
     db.session.commit()
-    user_detail_data = {'id': user_detail.id, 'name': user_detail.name, 'profession': user_detail.profession, 
-                        'description': user_detail.description, 'profile': user_detail.profile, 
-                        'facebook': user_detail.facebook, 'linkedin': user_detail.linkedin, 
-                        'instagram': user_detail.instagram, 'twitter': user_detail.twitter, 
-                        'github': user_detail.github, 'cv': user_detail.cv, 
-                        'detailed_description': user_detail.detailed_description}
+    
+    user_detail_data = {
+        'id': user_detail.id,
+        'name': user_detail.name,
+        'profession': user_detail.profession,
+        'facebook': user_detail.facebook,
+        'linkedin': user_detail.linkedin,
+        'github':user_detail.github,
+        'instagram':user_detail.instagram,
+        'cv':user_detail.cv,
+        'profile': user_detail.profile,
+        'twitter':user_detail.twitter,
+        'description':user_detail.detailed_description
+    }
+    
     return jsonify(user_detail_data)
+
+
+@main.route('/user_profile/<int:id>', methods=['PATCH'])
+def update_user_profile(id):
+    user_detail = User_Detail.query.get(id)
+    if not user_detail:
+        return jsonify({'error': 'User detail not found'}), 404
+    
+    profile_file = request.files.get('profile')
+    cv_file = request.files.get('cv')
+    
+    # Check if profile image is provided
+    if profile_file and profile_file.filename != '':
+        if allowed_file(profile_file.filename):
+            profile_filename = secure_filename(profile_file.filename)
+            profile_new_filename = generate_random_filename(profile_filename)
+            profile_relative_path = os.path.join(current_app.config['UPLOAD_FOLDER'], profile_new_filename)
+            profile_file.save(profile_relative_path)
+            user_detail.profile = profile_new_filename
+        else:
+            return jsonify({'error': 'Invalid file format for profile image upload'}), 400
+    
+    # Check if CV is provided
+    if cv_file and cv_file.filename != '':
+        if allowed_file(cv_file.filename):
+            cv_filename = secure_filename(cv_file.filename)
+            cv_new_filename = generate_random_filename(cv_filename)
+            cv_relative_path = os.path.join(current_app.config['UPLOAD_FOLDER'], cv_new_filename)
+            cv_file.save(cv_relative_path)
+            user_detail.cv = cv_new_filename
+        else:
+            return jsonify({'error': 'Invalid file format for CV upload'}), 400
+
+    db.session.commit()
+
+    return jsonify({
+        'message': 'Profile and/or CV updated successfully',
+        'user_detail': {
+            'id': user_detail.id,
+            'name': user_detail.name,
+            'profession': user_detail.profession,
+            'facebook': user_detail.facebook,
+            'linkedin': user_detail.linkedin,
+            'github': user_detail.github,
+            'instagram': user_detail.instagram,
+            'cv': user_detail.cv,
+            'profile': user_detail.profile,
+            'twitter': user_detail.twitter,
+            'description': user_detail.detailed_description
+        }
+    }), 200
 
 
 @main.route('/services/<int:id>', methods=['PATCH'])
@@ -269,6 +280,17 @@ def update_project(id):
     project = Project.query.get(id)
     if not project:
         return jsonify({'message': 'Project not found'}), 404
+    
+    # Handle image upload
+    image_file = request.files.get('images')
+    if image_file and allowed_file(image_file.filename):
+        filename = secure_filename(image_file.filename)
+        new_filename = generate_random_filename(filename)
+        relative_path = os.path.join(current_app.config['UPLOAD_FOLDER'], new_filename)
+        image_file.save(relative_path)
+        project.images= new_filename
+    
+    # Update other project details
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
         data = request.json
@@ -279,10 +301,19 @@ def update_project(id):
     
     for key, value in data.items():
         setattr(project, key, value)
+    
     db.session.commit()
-    project_data = {'id': project.id, 'images': project.images, 'short_description': project.short_description,
-                    'project_link': project.project_link}
+    
+    project_data = {
+        'id': project.id,
+        'image': project.images,  
+        'short_description': project.short_description,
+        'project_link': project.project_link,
+    }
     return jsonify(project_data)
+
+
+
 
 @main.route('/projects/<int:id>', methods=['DELETE'])
 def delete_project(id):
