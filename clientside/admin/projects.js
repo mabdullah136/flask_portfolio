@@ -3,7 +3,7 @@ if (!isUserLoggedIn) {
   window.location.href = "/admin/login.html";
 }
 document.addEventListener("DOMContentLoaded", function() {
-    const baseUrl = 'http://192.168.100.194:5000';
+    const baseUrl = 'http://127.0.0.1:5000';
     const projectList = document.getElementById('project-list');
     const projectModal = document.getElementById('projectModal');
     const closeProjectModal = document.querySelector('#projectModal .close');
