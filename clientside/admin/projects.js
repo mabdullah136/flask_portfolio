@@ -1,6 +1,6 @@
 const isUserLoggedIn = localStorage.getItem("isLoggedIn");
 if (!isUserLoggedIn) {
-  window.location.href = "/admin/login.html";
+  window.location.href = "/clientside/admin/login.html";
 }
 document.addEventListener("DOMContentLoaded", function() {
     const baseUrl = 'http://127.0.0.1:5000';
