@@ -26,7 +26,7 @@ document.getElementById('login-form').addEventListener('submit', function(event)
         if (response.status === 200) {
             alert("Login successful!");
             localStorage.setItem('isLoggedIn', true);
-            window.location.href = "/admin/users.html";
+            window.location.href = "/clientside/admin/users.html";
 
         } else {
             alert("Invalid username or password");
