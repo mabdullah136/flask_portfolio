@@ -44,7 +44,7 @@ form.addEventListener("submit", (e) => {
   if (detailedDescription.value.trim() !== "")
     formData.append("detailed_description", detailedDescription.value);
 
-  fetch("http://192.168.100.194:5000/user_details/11", {
+  fetch("http://127.0.0.1:5000/user_details/11", {
     method: "PATCH",
     body: formData,
   })
@@ -66,7 +66,7 @@ documentsForm.addEventListener("submit", (e) => {
   if (profilePic.files.length > 0)
     formData.append("profile", profilePic.files[0]);
 
-  fetch("http://192.168.100.194:5000/user_profile/11", {
+  fetch("http://127.0.0.1:5000/user_profile/11", {
     method: "PATCH",
     body: formData,
   })

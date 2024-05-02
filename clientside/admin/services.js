@@ -4,7 +4,7 @@ if (!isUserLoggedIn) {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    const base = 'http://192.168.100.194:5000';
+    const base = 'http://127.0.0.1:5000';
     const defaultIconClass = 'bx-x';
     const serviceList = document.getElementById('service-list');
     const updateServiceModal = document.getElementById('updateServiceModal');
