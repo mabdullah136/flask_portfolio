@@ -1,0 +1,11 @@
+# Exclude environment
+env/
+
+# Exclude database file
+db.sqlite3/
+db.sqlite3
+# Exclude static files
+static/
+
+# Exclude media files
+media/

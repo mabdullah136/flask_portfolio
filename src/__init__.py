@@ -15,8 +15,8 @@ def create_app():
     app.config['MAIL_SERVER'] = 'smtp.gmail.com' 
     app.config['MAIL_PORT'] = 587 
     app.config['MAIL_USE_TLS'] = True
-    app.config['MAIL_USERNAME'] = 'anasircft@gmail.com'  
-    app.config['MAIL_PASSWORD'] = 'vlnw cbss thko jjoj' 
+    app.config['MAIL_USERNAME'] = 'sabir99918@gmail.com'  
+    app.config['MAIL_PASSWORD'] = 'cumc cclk zclh wrms' 
     mail = Mail(app)
     app.config['SECRET_KEY']='secret-key'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:@localhost/portfolio'

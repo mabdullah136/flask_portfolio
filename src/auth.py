@@ -24,14 +24,11 @@ def login_post():
     if not email or not isinstance(email, str):
         return make_response(jsonify({'message': 'Email is missing or invalid'}), 400)
     if not validate_email(email):
-        flash('Email is in the wrong format', 'info')
         return make_response(jsonify({'message': 'Email is in the wrong format'}), 400)
     user = User.query.filter_by(email=email).first()
     if user is None:
-        flash('User does not exist', 'info')
         return make_response(jsonify({'message': 'User does not exist'}), 401)
     if user.password != password:
-        flash('Password incorrect', 'info')
         return make_response(jsonify({'message': 'Password incorrect'}), 401)
     login_user(user)
     return make_response(jsonify({'message': 'Login successful'}), 200)

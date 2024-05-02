@@ -1,7 +1,7 @@
 from flask import Blueprint,render_template,Flask,request,redirect,url_for,flash,current_app,jsonify
 from flask_login import login_required,current_user
 from werkzeug.security import check_password_hash
-from .models import User,User_Detail,Service,Project,Contact
+from .models import User,User_Detail,Service,Project
 import os,secrets
 from . import db
 from werkzeug.utils import secure_filename
@@ -27,7 +27,7 @@ def send_email_endpoint():
 
 def send_email(name, email, subject, message):
     mail = current_app.extensions['mail'] 
-    msg = Message(subject, sender=email, recipients=['anasircft@gmail.com'], body=message)
+    msg = Message(subject, sender=email, recipients=['sabir99918@gmail.com'], body=message)
     mail.send(msg)
 
 
@@ -113,21 +113,6 @@ def create_project():
     return jsonify({'message': 'Project created successfully'}), 201
 
 
-
-@main.route('/contact', methods=['POST'])
-def create_contact():
-    content_type = request.headers.get('Content-Type')
-    if content_type == 'application/json':
-        data = request.json
-    elif content_type.startswith('multipart/form-data') or content_type.startswith('application/x-www-form-urlencoded'):
-        data = request.form.to_dict(flat=True)
-    else:
-        return make_response(jsonify({'message': 'Unsupported Content-Type'}), 415)
-    contact = Contact(**data)
-    db.session.add(contact)
-    db.session.commit()
-    return jsonify({'message': 'Contact created successfully'}), 201
-
 @main.route('/images/<path:filename>')
 def serve_image(filename):
     return send_from_directory('src/static/images', filename)
@@ -158,14 +143,6 @@ def get_projects():
     projects_data = [{'id': project.id, 'images': project.images, 'short_description': project.short_description,
                       'project_link': project.project_link} for project in projects]
     return jsonify(projects_data)
-
-
-@main.route('/contacts', methods=['GET'])
-def get_contacts():
-    contacts = Contact.query.all()
-    contacts_data = [{'id': contact.id, 'name': contact.name, 'email': contact.email, 'phone': contact.phone,
-                      'subject': contact.subject, 'message': contact.message} for contact in contacts]
-    return jsonify(contacts_data)
 
 
 @main.route('/user_details/<int:id>', methods=['PATCH'])

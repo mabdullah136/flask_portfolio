@@ -50,10 +50,3 @@ class Project(db.Model):
     short_description = db.Column(db.String(100), nullable=False)
     project_link = db.Column(db.String(100),nullable=False)
 
-class Contact(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100), nullable=False)
-    phone = db.Column(db.String(15),)
-    subject = db.Column(db.String(100))
-    message = db.Column(db.Text)
