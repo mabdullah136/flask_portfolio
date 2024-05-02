@@ -140,7 +140,7 @@ def get_services():
 @main.route('/projects', methods=['GET'])
 def get_projects():
     projects = Project.query.all()
-    projects_data = [{'id': project.id, 'images': project.images, 'short_description': project.short_description,
+    projects_data = [{'id': project.id,'name':project.name , 'images': project.images, 'short_description': project.short_description,
                       'project_link': project.project_link} for project in projects]
     return jsonify(projects_data)
 
